@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 
-const useView = <T extends HTMLElement>(): [boolean, React.MutableRefObject<T | null>] => {
-  const ref = useRef<T | null>(null);
+const useView = <T extends HTMLElement>(ref: React.RefObject<T>) => {
   const [isInView, setInView] = useState(false);
 
   useEffect(() => {
@@ -23,7 +22,7 @@ const useView = <T extends HTMLElement>(): [boolean, React.MutableRefObject<T | 
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  return [isInView, ref];
+  return isInView;
 };
 
 export default useView;
