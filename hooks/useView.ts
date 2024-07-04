@@ -1,7 +1,6 @@
-import { useRef, useEffect, useState } from "react";
 import useElementBounding from "./useElementBounding";
 
-const useView = <T extends HTMLElement>(ref: React.RefObject<T>) => {
+const useView = (ref: React.RefObject<HTMLElement>) => {
   const { top, left, bottom, right } = useElementBounding(ref);
 
   return (
