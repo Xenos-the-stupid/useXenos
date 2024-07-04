@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import useElementBounding from "./useElementBounding";
 
 const useElementSize = (
   ref: React.RefObject<HTMLElement>
@@ -6,28 +6,9 @@ const useElementSize = (
   width: number;
   height: number;
 } => {
-  const [size, setSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
+  const { width, height } = useElementBounding(ref);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (ref.current) {
-        const { offsetHeight, offsetWidth } = ref.current;
-        setSize({ width: offsetWidth, height: offsetHeight });
-      }
-    };
-
-    if (ref.current) {
-      handleResize();
-    }
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [ref]);
-
-  return size;
+  return { width, height };
 };
 
 export default useElementSize;
