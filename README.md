@@ -1,8 +1,8 @@
 # useXenos
 
-a set of react hooks based on [vueuse](https://vueuse.org/)
+a set of react hooks inspired by [vueuse](https://vueuse.org/)
 
-these hooks inhance the DX by providing a collection of reusable components
+these hooks inhance the DX by providing a collection of reusable hooks
 
 ## todo
 
