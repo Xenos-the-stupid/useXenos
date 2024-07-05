@@ -8,3 +8,4 @@ these hooks inhance the DX by providing a collection of reusable hooks
 
 - [ ] - test all the hooks to prevent any unexpected behaviors
 - [ ] - implement more then 20 hooks that can help improving DX
+- [ ] - add JsDocs for the components provided with example
