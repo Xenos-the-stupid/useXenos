@@ -19,17 +19,17 @@ const useElementBounding = (ref: React.RefObject<HTMLElement>) => {
         setElementBounding({ top, left, bottom, height, right, x, y, width });
       }
     };
-
     updateBounding();
-
-    window.addEventListener("scroll", updateBounding);
-
+    const handleResize = () => window.requestAnimationFrame(updateBounding);
+    window.addEventListener("scroll", handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener("scroll", updateBounding);
+      window.removeEventListener("scroll", handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, [ref]);
 
-  return { ...elementBounding };
+  return elementBounding || ({} as DOMRect);
 };
 
 export default useElementBounding;
