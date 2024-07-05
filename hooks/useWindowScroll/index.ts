@@ -1,15 +1,12 @@
 type useScrollBehaviorOptions = { behavior?: ScrollBehavior };
 
 const useWindowScroll = (options: useScrollBehaviorOptions = {}) => {
-  const setScrollX = (value: number) => {
-    window.scrollX += value;
-    window.scrollTo({ left: value, behavior: options.behavior });
+  const scroll = (_direction: "left" | "top", value: number) => {
+    window[_direction === "left" ? "scrollX" : "scrollY"] += value;
+    window.scrollTo({ [_direction]: value, behavior: options.behavior });
   };
-  const setScrollY = (value: number) => {
-    window.scrollY += value;
-    window.scrollTo({ top: value, behavior: options.behavior });
-  };
-  return { setScrollX, setScrollY };
+
+  return { setScrollX: (value: number) => scroll("left", value), setScrollY: (value: number) => scroll("top", value) };
 };
 
 export default useWindowScroll;
