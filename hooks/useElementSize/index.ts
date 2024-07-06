@@ -1,4 +1,4 @@
-import useElementBounding from "./useElementBounding";
+import useElementBounding from "../useElementBounding";
 
 const useElementSize = (
   ref: React.RefObject<HTMLElement>
