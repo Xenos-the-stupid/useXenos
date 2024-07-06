@@ -12,7 +12,7 @@ const useMouseElement = (ref: RefObject<HTMLElement>) => {
     return () => {
       ref.current?.removeEventListener("mousemove", handleMouseMove);
     };
-  });
+  }, [ref]);
 
   return { ...mousePosition };
 };
