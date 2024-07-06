@@ -1,4 +1,4 @@
-import useElementBounding from "./useElementBounding";
+import useElementBounding from "../useElementBounding";
 
 const useView = (ref: React.RefObject<HTMLElement>) => {
   const { top, left, bottom, right } = useElementBounding(ref);
