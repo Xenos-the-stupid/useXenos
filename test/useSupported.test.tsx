@@ -1,5 +1,6 @@
 import { expect, test, describe } from "vitest";
 import useSupported from "../hooks/useSupported";
+
 describe("useSupported", () => {
   test("should be defined", () => {
     expect(useSupported).toBeDefined();

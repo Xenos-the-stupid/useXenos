@@ -1,5 +1,6 @@
 const useSupported = (callback: () => unknown) => {
-  return Boolean(callback());
+  const isSupported = Boolean(callback());
+  return isSupported;
 };
 
 export default useSupported;
