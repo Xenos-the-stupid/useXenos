@@ -14,10 +14,11 @@ const useElementBounding = (ref: React.RefObject<HTMLElement>) => {
 
   useLayoutEffect(() => {
     const updateBounding = () => {
-      if (ref.current) {
-        const { top, left, bottom, height, right, x, y, width } = ref.current.getBoundingClientRect();
-        setElementBounding({ top, left, bottom, height, right, x, y, width });
+      if (!ref.current) {
+        throw new Error("No element found");
       }
+      const { top, left, bottom, height, right, x, y, width } = ref.current.getBoundingClientRect();
+      setElementBounding({ top, left, bottom, height, right, x, y, width });
     };
     updateBounding();
     const handleResize = () => window.requestAnimationFrame(updateBounding);
