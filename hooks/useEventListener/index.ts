@@ -11,13 +11,15 @@ const useEventListener = (
 
   useEffect(() => {
     console.log("from the hook");
-    if (target) {
-      target.addEventListener(type, internalHandler.current, options);
-
-      return () => {
-        target.removeEventListener(type, internalHandler.current);
-      };
+    if (!target) {
+      throw new Error("provide target element by providing ref for useEventListener");
     }
+    const element = "current" in target ? target.current : target;
+    element.addEventListener(type, internalHandler.current, options);
+
+    return () => {
+      element.removeEventListener(type, internalHandler.current);
+    };
   }, [target, type, options]);
 };
 
