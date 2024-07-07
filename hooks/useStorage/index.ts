@@ -11,7 +11,12 @@ const useStorage = <T>(name: string, data?: T): [T | undefined, (newData: T) => 
     return undefined;
   });
 
-  const setItem = (newData: T) => {
+  const setItem = (newData?: T) => {
+    if (newData === undefined) {
+      localStorage.removeItem(name);
+      setLocalStorageItem(undefined);
+      return;
+    }
     localStorage.setItem(name, JSON.stringify(newData));
     setLocalStorageItem(newData);
   };
