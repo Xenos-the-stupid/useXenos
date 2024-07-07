@@ -13,7 +13,27 @@ describe("useElementSize", () => {
   test("should return 0 for width and height if the ref is null", () => {
     const ref = { current: null };
     const { result } = renderHook(() => useElementSize(ref));
-    expect(result.current.width).toBe(0);
-    expect(result.current.height).toBe(0);
+    expect(() => {
+      const size = result.current;
+    }).toThrowError("No element found");
+  });
+
+  test("should return initial values for the element", () => {
+    const ref = { current: document.createElement("div") };
+    ref.current.style.width = "100px";
+    ref.current.style.height = "100px";
+    const { result, waitFor } = renderHook(() => useElementSize(ref));
+    const { width, height } = result.current;
+    waitFor(() => {
+      expect(width).toBe(100);
+      expect(height).toBe(100);
+    });
+
+    ref.current.style.width = "200px";
+    ref.current.style.height = "200px";
+    waitFor(() => {
+      expect(width).toBe(200);
+      expect(height).toBe(200);
+    });
   });
 });
