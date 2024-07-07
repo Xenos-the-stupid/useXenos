@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import useOnline from "../hooks/useOnline";
-import { renderHook } from "@testing-library/react";
+import { fireEvent, renderHook } from "@testing-library/react";
 
 describe("useOnline", () => {
   test("useOnline should be defined", () => {
@@ -10,31 +10,39 @@ describe("useOnline", () => {
   test("useOnline should be a function", () => {
     expect(typeof useOnline).toBe("function");
   });
-  test("calling makeOnline updates the online state to true", () => {
+
+  test("should return true when entering website", () => {
     const { result } = renderHook(() => useOnline());
-    const initialOnline = result.current;
-    expect(result.current).toBe(true);
-  });
-  test("event listeners for online and offline are added and removed correctly", () => {
-    const { result, unmount } = renderHook(() => useOnline());
-    const initialOnline = result.current;
-    unmount();
-  });
-  test("initial online state is correctly set based on navigator.onLine", () => {
-    const { result } = renderHook(() => useOnline());
-    expect(result.current).toBe(navigator.onLine);
-  });
-  test("calling makeOnline updates the online state to true", () => {
-    const { result } = renderHook(() => useOnline());
-    const initialOnline = result.current;
-    window.dispatchEvent(new Event("online"));
     expect(result.current).toBe(true);
   });
 
-  test("calling makeOffline updates the online state to false", () => {
-    const { result } = renderHook(() => useOnline());
-    const initialOnline = result.current;
-    window.dispatchEvent(new Event("offline"));
+  test("should keep the state when unmount", () => {
+    const { result, unmount } = renderHook(() => useOnline());
+    unmount();
     expect(result.current).toBe(true);
+  });
+
+  test("should keep up with the navigator.online", () => {
+    const { result } = renderHook(() => useOnline());
+    expect(result.current).toBe(navigator.onLine);
+  });
+
+  test("should be true when window gets online", () => {
+    const { result } = renderHook(() => useOnline());
+    fireEvent.online(window);
+    expect(result.current).toBe(true);
+  });
+
+  test("should be false when window gets online", () => {
+    const { result } = renderHook(() => useOnline());
+    fireEvent.offline(window);
+    expect(result.current).toBe(false);
+  });
+
+  test("should change state depending on the current state of the navigator", () => {
+    const { result } = renderHook(() => useOnline());
+    expect(result.current).toBe(true);
+    fireEvent.offline(window);
+    expect(result.current).toBe(false);
   });
 });
