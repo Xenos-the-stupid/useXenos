@@ -1,6 +1,11 @@
 import { useLayoutEffect } from "react";
 
-const useDraggable = (ref: React.RefObject<HTMLElement>, { x = 0, y = 0 }: { x?: number; y?: number }) => {
+type Options = {
+  x?: number;
+  y?: number;
+};
+
+const useDraggable = (ref: React.RefObject<HTMLElement>, { x = 0, y = 0 }: Options = {}) => {
   let startX: number | null = 0;
   let startY: number | null = 0;
 
