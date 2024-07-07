@@ -27,4 +27,12 @@ describe("useUpdateEffect", () => {
     rerender();
     expect(callback).toHaveBeenCalledTimes(0);
   });
+  test("hook should not run twice when the value is not changed", () => {
+    const callback = vi.fn();
+    let value = 0;
+    const { rerender } = renderHook(() => useUpdateEffect(callback, [value]));
+    expect(callback).toHaveBeenCalledTimes(0);
+    rerender();
+    expect(callback).toHaveBeenCalledTimes(0);
+  });
 });

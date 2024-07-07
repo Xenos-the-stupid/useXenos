@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import useOnline from "../hooks/useOnline";
 import { fireEvent, renderHook } from "@testing-library/react";
+import { act } from "react";
 
 describe("useOnline", () => {
   test("useOnline should be defined", () => {
@@ -42,7 +43,9 @@ describe("useOnline", () => {
   test("should change state depending on the current state of the navigator", () => {
     const { result } = renderHook(() => useOnline());
     expect(result.current).toBe(true);
-    fireEvent.offline(window);
+    act(() => {
+      fireEvent.offline(window);
+    });
     expect(result.current).toBe(false);
   });
 });

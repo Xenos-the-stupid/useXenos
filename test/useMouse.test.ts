@@ -2,6 +2,7 @@ import { renderHook } from "@testing-library/react-hooks";
 import useMouse from "../hooks/useMouse";
 import { describe, expect, test } from "vitest";
 import { fireEvent } from "@testing-library/dom";
+import { act } from "react";
 
 describe("useMouse", () => {
   test("should return initial mouse position", () => {
@@ -13,7 +14,9 @@ describe("useMouse", () => {
 
   test("update value when mouse moves", () => {
     const { result, waitFor } = renderHook(() => useMouse());
-    fireEvent.mouseMove(window, { clientX: 200, clientY: 200 });
+    act(() => {
+      fireEvent.mouseMove(window, { clientX: 200, clientY: 200 });
+    });
 
     waitFor(() => {
       const { x, y } = result.current;
