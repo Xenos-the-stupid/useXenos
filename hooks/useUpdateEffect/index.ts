@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 
 const useUpdateEffect = (callback: () => void, deps: any[]) => {
-  const isFirstRender = useRef(true);
+  const isRendered = useRef(false);
 
   useEffect(() => {
-    if (!isFirstRender.current) {
-      return callback();
-    }
-    isFirstRender.current = false;
+    if (!isRendered.current) {
+      isRendered.current = true;
+      return;
+    } else return callback();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 };
