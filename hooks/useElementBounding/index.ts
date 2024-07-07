@@ -1,4 +1,5 @@
-import { useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
+import useEventListener from "../useEventListener";
 
 const useElementBounding = (ref: React.RefObject<HTMLElement>) => {
   const [elementBounding, setElementBounding] = useState({
@@ -12,23 +13,14 @@ const useElementBounding = (ref: React.RefObject<HTMLElement>) => {
     width: 0,
   });
 
-  useLayoutEffect(() => {
-    const updateBounding = () => {
-      if (!ref.current) {
-        throw new Error("No element found");
-      }
-      const { top, left, bottom, height, right, x, y, width } = ref.current.getBoundingClientRect();
-      setElementBounding({ top, left, bottom, height, right, x, y, width });
-    };
-    updateBounding();
-    const handleResize = () => window.requestAnimationFrame(updateBounding);
-    window.addEventListener("scroll", handleResize);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("scroll", handleResize);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [ref]);
+  const updateBounding = () =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useCallback(() => {
+      setElementBounding({ ...elementBounding, ...ref.current?.getBoundingClientRect() });
+    }, [ref, elementBounding]);
+
+  useEventListener(window, "resize", updateBounding);
+  useEventListener(window, "scroll", updateBounding);
 
   return elementBounding || ({} as DOMRect);
 };
