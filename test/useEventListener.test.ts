@@ -1,6 +1,7 @@
 import { describe, test, expect, vi } from "vitest";
 import useEventListener from "../hooks/useEventListener";
-import { fireEvent, renderHook } from "@testing-library/react";
+import { renderHook } from "@testing-library/react-hooks";
+import { fireEvent } from "@testing-library/dom";
 import { act } from "react";
 
 describe("useEventListener", () => {
@@ -22,10 +23,22 @@ describe("useEventListener", () => {
     expect(handler).toHaveBeenCalled();
   });
 
-  test("should not add event listener when target is not provided", () => {
+  test("should throw error when target is not provided", () => {
     const handler = vi.fn();
-    renderHook(() => useEventListener(null, "click", handler));
+    const { result } = renderHook(() => useEventListener(null, "click", handler));
 
-    expect(handler).not.toHaveBeenCalled();
+    expect(() => {
+      const res = result.current;
+    }).toThrowError("provide target element by providing ref for useEventListener");
+  });
+
+  test("should call the function when the event is triggered", () => {
+    const target = { current: document.createElement("div") };
+    const handler = vi.fn();
+    renderHook(() => useEventListener(target, "click", handler));
+    act(() => {
+      fireEvent.click(target.current);
+    });
+    expect(handler).toHaveBeenCalled();
   });
 });
