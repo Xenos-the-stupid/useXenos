@@ -1,25 +1,11 @@
 import { useLayoutEffect, useState } from "react";
+import useEventListener from "../useEventListener";
 
 const useOnline = () => {
   const [online, setOnline] = useState(navigator.onLine);
 
-  useLayoutEffect(() => {
-    const makeOnline = () => {
-      setOnline(() => true);
-    };
-
-    const makeOffline = () => {
-      setOnline(() => false);
-    };
-
-    window.addEventListener("offline", makeOffline);
-    window.addEventListener("online", makeOnline);
-
-    return () => {
-      window.removeEventListener("offline", makeOffline);
-      window.removeEventListener("online", makeOnline);
-    };
-  });
+  useEventListener(window, "online", () => setOnline(true));
+  useEventListener(window, "offline", () => setOnline(false));
   return online;
 };
 
