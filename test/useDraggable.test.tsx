@@ -1,8 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { render, renderHook, screen } from "@testing-library/react";
-import TestComponent from "../hooks/useDraggable/test-component";
+import { renderHook } from "@testing-library/react";
 import useDraggable from "../hooks/useDraggable";
-import React from "react";
 
 describe("useDraggable", () => {
   test("useDraggable should be defined", () => {
@@ -14,19 +12,24 @@ describe("useDraggable", () => {
   });
 });
 
-describe("TestComponent", () => {
-  test("should render with initial x and y values of 100", async () => {
-    const { findByTestId } = render(<TestComponent />);
-
-    const xElement = await findByTestId("x");
-    const yElement = await findByTestId("y");
-
-    expect(xElement.textContent).toBe("100");
-    expect(yElement.textContent).toBe("100");
+describe("useDraggable", () => {
+  test("useDraggable should be defined", () => {
+    expect(typeof useDraggable).toBe("function");
   });
-  test("should have a position absolute", async () => {
-    render(<TestComponent />);
-    const element = screen.getAllByTestId("test-position");
-    expect(element[0].style.position).toBe("fixed");
+
+  test("should return initial x and y values of 100", () => {
+    const ref = { current: document.createElement("div") };
+    const { result } = renderHook(() => useDraggable(ref, { x: 100, y: 100 }));
+    const { x, y } = result.current;
+    expect(x).toBe(100);
+    expect(y).toBe(100);
+  });
+
+  test("should have a position absolute", () => {
+    const ref = { current: document.createElement("div") };
+    renderHook(() => useDraggable(ref, { x: 100, y: 100 }));
+    expect(ref.current.style.position).toBe("fixed");
+    expect(ref.current.style.left).toBe("100px");
+    expect(ref.current.style.top).toBe("100px");
   });
 });
