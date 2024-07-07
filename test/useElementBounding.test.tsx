@@ -10,7 +10,7 @@ describe("useBoundingElement", () => {
   test("useBoundingElement should be a function", () => {
     expect(typeof useBoundingElement).toBe("function");
   });
-  test("", () => {
+  test("hook should return initial values and 0 when unmount", () => {
     const ref = { current: document.createElement("div") };
     ref.current.style.width = "100px";
     ref.current.style.height = "100px";
