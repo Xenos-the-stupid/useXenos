@@ -12,10 +12,12 @@ describe("useElementSize", () => {
 
   test("should return 0 for width and height if the ref is null", () => {
     const ref = { current: null };
-    const { result } = renderHook(() => useElementSize(ref));
-    expect(() => {
-      const size = result.current;
-    }).toThrowError("No element found");
+    const { result, waitFor } = renderHook(() => useElementSize(ref));
+    waitFor(() => {
+      expect(() => {
+        const size = result.current;
+      }).toThrowError("No element found");
+    });
   });
 
   test("should return initial values for the element", () => {
