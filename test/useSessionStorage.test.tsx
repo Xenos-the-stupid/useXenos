@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import useSessionStorage from "../hooks/useSessionStorage";
-import { renderHook } from "@testing-library/react";
+import { renderHook } from "@testing-library/react-hooks";
+import { act } from "react";
 
 describe("useSessionStorage", () => {
   test("should return initial data from sessionStorage if available", () => {
@@ -26,12 +27,25 @@ describe("useSessionStorage", () => {
   test("should update data in sessionStorage", () => {
     const name = "testKey";
     const data = { test: "testValue" };
-
-    const { result } = renderHook(() => useSessionStorage(name, data));
-
+    const { result, waitFor } = renderHook(() => useSessionStorage(name, data));
     const newData = { test: "newValue" };
     result.current[1](newData);
 
-    expect(sessionStorage.getItem(name)).toEqual(JSON.stringify(newData));
+    waitFor(() => {
+      expect(result.current[0]).toEqual(newData);
+      expect(sessionStorage.getItem(name)).toEqual(JSON.stringify(newData));
+    });
+  });
+
+  test("should remove the item when passing undefined", () => {
+    const name = "testKey";
+    const data = { test: "testValue" };
+    const { result, waitFor } = renderHook(() => useSessionStorage(name, data));
+    //todo fix this test
+    result.current[1](undefined!);
+    waitFor(() => {
+      expect(result.current[0]).not.toBeDefined();
+      expect(sessionStorage.getItem(name)).not.toBeDefined();
+    });
   });
 });

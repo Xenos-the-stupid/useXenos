@@ -11,7 +11,12 @@ const useSessionStorage = <T>(name: string, data?: T): [T | undefined, (newData:
     return undefined;
   });
 
-  const setItem = (newData: T) => {
+  const setItem = (newData?: T) => {
+    if (newData === undefined) {
+      sessionStorage.removeItem(name);
+      setLocalStorageItem(undefined);
+      return;
+    }
     sessionStorage.setItem(name, JSON.stringify(newData));
     setLocalStorageItem(newData);
   };
@@ -19,4 +24,4 @@ const useSessionStorage = <T>(name: string, data?: T): [T | undefined, (newData:
   return [localStorageItem, setItem];
 };
 
-export default useSessionStorage 
+export default useSessionStorage;
