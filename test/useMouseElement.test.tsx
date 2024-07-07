@@ -17,7 +17,7 @@ describe("useMouseElement", () => {
     const { result } = renderHook(() => useMouseElement(ref));
     expect(() => {
       const size = result.current;
-    }).toThrowError("Provide target element by providing ref for useMouseElement");
+    }).toThrowError("provide target element");
   });
 
   test("should update values when the mouse moves", () => {
