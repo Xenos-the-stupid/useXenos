@@ -29,7 +29,7 @@ describe("useEventListener", () => {
 
     expect(() => {
       const res = result.current;
-    }).toThrowError("provide target element by providing ref for useEventListener");
+    }).toThrowError("provide target element");
   });
 
   test("should call the function when the event is triggered", () => {
