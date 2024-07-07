@@ -12,7 +12,7 @@ const useEventListener = (
   useEffect(() => {
     console.log("from the hook");
     if (!target) {
-      throw new Error("provide target element by providing ref for useEventListener");
+      throw new Error("provide target element");
     }
     const element = "current" in target ? target.current : target;
     element.addEventListener(type, internalHandler.current, options);
