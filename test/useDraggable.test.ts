@@ -1,7 +1,8 @@
-import { describe, expect, test } from "vitest";
 import { renderHook } from "@testing-library/react-hooks";
 import { fireEvent } from "@testing-library/dom";
+import { describe, expect, test } from "vitest";
 import useDraggable from "../hooks/useDraggable";
+import { waitFor } from "@testing-library/react";
 import { act } from "react";
 
 describe("useDraggable", () => {
@@ -13,10 +14,6 @@ describe("useDraggable", () => {
     expect(typeof useDraggable).toBe("function");
   });
 
-  test("useDraggable should be defined", () => {
-    expect(typeof useDraggable).toBe("function");
-  });
-
   test("should return initial x and y values of 100", () => {
     const ref = { current: document.createElement("div") };
     const { result } = renderHook(() => useDraggable(ref, { x: 100, y: 100 }));
@@ -25,7 +22,7 @@ describe("useDraggable", () => {
     expect(y).toBe(100);
   });
 
-  test("should have a position absolute", () => {
+  test("should have a position fixed", () => {
     const ref = { current: document.createElement("div") };
     renderHook(() => useDraggable(ref, { x: 100, y: 100 }));
     expect(ref.current.style.position).toBe("fixed");
@@ -35,12 +32,25 @@ describe("useDraggable", () => {
 
   test("position should be updated", () => {
     const ref = { current: document.createElement("div") };
-    const { result, waitFor } = renderHook(() => useDraggable(ref, { x: 100, y: 100 }));
+    const { result } = renderHook(() => useDraggable(ref, { x: 100, y: 100 }));
+
+    // Simulate mouse down event
     act(() => {
-      fireEvent.mouseMove(ref.current, { clientX: 200, clientY: 200 });
+      fireEvent.mouseDown(ref.current, { clientX: 100, clientY: 100 });
     });
-    const { x, y } = result.current;
+
+    // Simulate mouse move event
+    act(() => {
+      fireEvent.mouseMove(document, { clientX: 200, clientY: 200 });
+    });
+
+    // Simulate mouse up event
+    act(() => {
+      fireEvent.mouseUp(document);
+    });
+
     waitFor(() => {
+      const { x, y } = result.current;
       expect(x).toBe(200);
       expect(y).toBe(200);
     });
