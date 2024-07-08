@@ -1,6 +1,7 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import useOnline from "../hooks/useOnline";
-import { fireEvent, renderHook } from "@testing-library/react";
+import { renderHook } from "@testing-library/react-hooks";
+import { fireEvent } from "@testing-library/dom";
 import { act } from "react";
 
 describe("useOnline", () => {
@@ -47,5 +48,27 @@ describe("useOnline", () => {
       fireEvent.offline(window);
     });
     expect(result.current).toBe(false);
+  });
+
+  test("should run the function callback when online", () => {
+    const fn = vi.fn();
+    const { waitFor } = renderHook(() => useOnline({ onOnline: fn }));
+    act(() => {
+      fireEvent.online(window);
+    });
+    act(() => {
+      expect(fn).toBeCalled();
+    });
+  });
+
+  test("should run the function callback when offline", () => {
+    const fn = vi.fn();
+    const { waitFor } = renderHook(() => useOnline({ onOffline: fn }));
+    act(() => {
+      fireEvent.offline(window);
+    });
+    act(() => {
+      expect(fn).toBeCalled();
+    });
   });
 });
