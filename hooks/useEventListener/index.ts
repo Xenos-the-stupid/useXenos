@@ -20,7 +20,7 @@ const useEventListener = (
     return () => {
       element.removeEventListener(type, internalHandler.current);
     };
-  }, [target, type, options]);
+  }, []);
 };
 
 export default useEventListener;
