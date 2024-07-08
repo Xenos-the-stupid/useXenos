@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import useEventListener from "../useEventListener";
 
 const useElementBounding = (ref: React.RefObject<HTMLElement>) => {

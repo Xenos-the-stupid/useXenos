@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from "react";
+import { RefObject, useState } from "react";
 import useEventListener from "../useEventListener";
 
 const useMouseElement = (ref: RefObject<HTMLElement>) => {
