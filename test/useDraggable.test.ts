@@ -2,7 +2,6 @@ import { renderHook } from "@testing-library/react-hooks";
 import { fireEvent } from "@testing-library/dom";
 import { describe, expect, test } from "vitest";
 import useDraggable from "../hooks/useDraggable";
-import { waitFor } from "@testing-library/react";
 import { act } from "react";
 
 describe("useDraggable", () => {
@@ -24,20 +23,15 @@ describe("useDraggable", () => {
 
   test.todo("position should be updated", () => {
     const ref = { current: document.createElement("div") };
-    const { result } = renderHook(() => useDraggable(ref, { x: 100, y: 100 }));
+    const { result, rerender } = renderHook(() => useDraggable(ref, { x: 100, y: 100 }));
 
     act(() => {
-      fireEvent.mouseDown(ref.current, { clientX: 50, clientY: 50 });
-    });
-
-    act(() => {
+      fireEvent.mouseDown(document, { clientX: 100, clientY: 100 });
       fireEvent.mouseMove(document, { clientX: 200, clientY: 200 });
-    });
-
-    act(() => {
       fireEvent.mouseUp(document);
     });
-    expect(result.current.x).not.toBe(100);
-    expect(result.current.y).not.toBe(100);
+    rerender(() => useDraggable(ref));
+    expect(ref.current.style.right).toBe(200);
+    expect(ref.current.style.left).toBe(200);
   });
 });
