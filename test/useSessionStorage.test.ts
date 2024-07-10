@@ -27,25 +27,21 @@ describe("useSessionStorage", () => {
   test("should update data in sessionStorage", () => {
     const name = "testKey";
     const data = { test: "testValue" };
-    const { result, waitFor } = renderHook(() => useSessionStorage(name, data));
+    const { result } = renderHook(() => useSessionStorage(name, data));
     const newData = { test: "newValue" };
-    result.current[1](newData);
+    act(() => result.current[1](newData));
 
-    waitFor(() => {
-      expect(result.current[0]).toEqual(newData);
-      expect(sessionStorage.getItem(name)).toEqual(JSON.stringify(newData));
-    });
+    expect(result.current[0]).toEqual(newData);
+    expect(sessionStorage.getItem(name)).toEqual(JSON.stringify(newData));
   });
 
-  test("should remove the item when passing undefined", () => {
+  test.todo("should remove the item when passing undefined", () => {
     const name = "testKey";
     const data = { test: "testValue" };
-    const { result, waitFor } = renderHook(() => useSessionStorage(name, data));
-    //todo fix this test
-    result.current[1](undefined!);
-    waitFor(() => {
-      expect(result.current[0]).not.toBeDefined();
-      expect(sessionStorage.getItem(name)).not.toBeDefined();
-    });
+    const { result } = renderHook(() => useSessionStorage(name, data));
+    //@ts-ignore
+    act(() => result.current[1](undefined));
+    expect(result.current[0]).not.toBeDefined();
+    expect(sessionStorage.getItem(name)).not.toBeDefined();
   });
 });

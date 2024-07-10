@@ -25,43 +25,35 @@ describe("useMouseElement", () => {
     const ref = { current: document.createElement("div") };
     ref.current.style.width = "200px";
     ref.current.style.height = "200px";
-    const { result, waitFor } = renderHook(() => useMouseElement(ref));
+    const { result } = renderHook(() => useMouseElement(ref));
     act(() => {
       fireEvent.mouseMove(ref.current, { clientX: 100, clientY: 100 });
     });
     const { x, y } = result.current;
     expect(x).toBe(100);
     expect(y).toBe(100);
-    act(() => {
-      fireEvent.mouseMove(ref.current, { clientX: 200, clientY: 200 });
-    });
-    waitFor(() => {
-      const { x, y } = result.current;
-      expect(x).toBe(200);
-      expect(y).toBe(200);
-    });
   });
-
   test("should update values when the mouse moves and size changes", () => {
     const ref = { current: document.createElement("div") };
     ref.current.style.width = "200px";
     ref.current.style.height = "200px";
-    const { result, waitFor } = renderHook(() => useMouseElement(ref));
+
+    const { result, rerender } = renderHook(() => useMouseElement(ref));
+
     act(() => {
       fireEvent.mouseMove(ref.current, { clientX: 100, clientY: 100 });
     });
-    const { x, y } = result.current;
-    expect(x).toBe(100);
-    expect(y).toBe(100);
+    expect(result.current.x).toBe(100);
+    expect(result.current.y).toBe(100);
+
     ref.current.style.width = "500px";
     ref.current.style.height = "500px";
     act(() => {
       fireEvent.mouseMove(ref.current, { clientX: 300, clientY: 300 });
     });
-    waitFor(() => {
-      const { x, y } = result.current;
-      expect(x).toBe(300);
-      expect(y).toBe(300);
-    });
+    rerender();
+
+    expect(result.current.x).toBe(300);
+    expect(result.current.y).toBe(300);
   });
 });

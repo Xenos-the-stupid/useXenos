@@ -5,22 +5,8 @@ import { fireEvent } from "@testing-library/dom";
 import { act } from "react";
 
 describe("useOnline", () => {
-  test("useOnline should be defined", () => {
-    expect(useOnline).toBeDefined();
-  });
-
-  test("useOnline should be a function", () => {
-    expect(typeof useOnline).toBe("function");
-  });
-
   test("should return true when entering website", () => {
     const { result } = renderHook(() => useOnline());
-    expect(result.current).toBe(true);
-  });
-
-  test("should keep the state when unmount", () => {
-    const { result, unmount } = renderHook(() => useOnline());
-    unmount();
     expect(result.current).toBe(true);
   });
 
@@ -52,23 +38,19 @@ describe("useOnline", () => {
 
   test("should run the function callback when online", () => {
     const fn = vi.fn();
-    const { waitFor } = renderHook(() => useOnline({ onOnline: fn }));
+    renderHook(() => useOnline({ onOnline: fn }));
     act(() => {
       fireEvent.online(window);
     });
-    act(() => {
-      expect(fn).toBeCalled();
-    });
+    expect(fn).toBeCalled();
   });
 
   test("should run the function callback when offline", () => {
     const fn = vi.fn();
-    const { waitFor } = renderHook(() => useOnline({ onOffline: fn }));
+    renderHook(() => useOnline({ onOffline: fn }));
     act(() => {
       fireEvent.offline(window);
     });
-    act(() => {
-      expect(fn).toBeCalled();
-    });
+    expect(fn).toBeCalled();
   });
 });

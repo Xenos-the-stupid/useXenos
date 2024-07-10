@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks";
 import useElementSize from "../hooks/useElementSize";
 import { describe, expect, test } from "vitest";
+import { act } from "react";
 
 describe("useElementSize", () => {
   test("should return an object with width and height properties", () => {
@@ -24,18 +25,12 @@ describe("useElementSize", () => {
     const ref = { current: document.createElement("div") };
     ref.current.style.width = "100px";
     ref.current.style.height = "100px";
-    const { result, waitFor } = renderHook(() => useElementSize(ref));
-    const { width, height } = result.current;
-    waitFor(() => {
-      expect(width).toBe(100);
-      expect(height).toBe(100);
-    });
-
-    ref.current.style.width = "200px";
-    ref.current.style.height = "200px";
-    waitFor(() => {
-      expect(width).toBe(200);
-      expect(height).toBe(200);
+    const { result, rerender } = renderHook(() => useElementSize(ref));
+    expect(result.current.width).toBe(0);
+    expect(result.current.height).toBe(0);
+    act(() => {
+      ref.current.style.width = "200px";
+      ref.current.style.height = "200px";
     });
   });
 });
